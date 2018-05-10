@@ -2,11 +2,11 @@ package mainpackage;
 public class Grades {
 
 	private String courseID;
-	private int studentID;
+	private int studentRegistrationNumber;
 	private int grade;
 	
-	public Grades(int stud_id,String course_id,int gradee) {
-		studentID=stud_id;
+	public Grades(int stud_RegistrationNumber,String course_id,int gradee) {
+		studentRegistrationNumber=stud_RegistrationNumber;
 		courseID=course_id;
 		grade=gradee;
 	}
@@ -15,8 +15,8 @@ public class Grades {
 		this.courseID = courseID;
 	}
 	
-	public void setStudentID(int studentID) {
-		this.studentID = studentID;
+	public void setStudentID(int stud_RegistrationNumber) {
+		this.studentRegistrationNumber = stud_RegistrationNumber;
 	}
 	
 	public void setGrade(int grade) {
@@ -27,8 +27,8 @@ public class Grades {
 		return courseID;
 	}
 	
-	public int getStudentID() {
-		return studentID;
+	public int getStudentRegistrationNumber() {
+		return studentRegistrationNumber;
 	}
 	
 	public int getGrade() {

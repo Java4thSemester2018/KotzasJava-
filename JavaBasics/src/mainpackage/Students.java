@@ -44,7 +44,7 @@ public class Students extends Users {
 		if (exists){
 			//Αν υπάρχει πρέπει να το έχει και το grades
 			for (int i=0;i<Secretaries.grades.size();i++){
-				if (registrationNumber==(((Grades)Secretaries.grades.get(i)).getStudentID())){
+				if (registrationNumber==(((Grades)Secretaries.grades.get(i)).getStudentRegistrationNumber())){
 					if (courseID.equals(((Grades)Secretaries.grades.get(i)).getCourseID())){
 						return ((Grades)Secretaries.grades.get(i)).getGrade();
 					}
