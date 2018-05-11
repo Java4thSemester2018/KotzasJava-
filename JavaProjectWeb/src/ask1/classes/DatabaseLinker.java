@@ -27,4 +27,22 @@ public class DatabaseLinker {
 			System.out.println("ERROR");
 		}
 	}
+	public static boolean IsUser(String Name) {
+		int count=0;
+		Connection c=null;
+		Statement stmt=null;
+		ResultSet rs=null;
+
+		try{
+			c= DriverManager.getConnection("jdbc:postgresql://localhost/postgres","kotz101","qwerty");
+			System.out.println("Opened database successfully");
+			stmt=c.createStatement();
+			rs = stmt.executeQuery("SELECT 1 FROM Users WHERE username='"+Name+"'");
+			return rs.next();
+		}
+		catch(Exception Ae){
+			System.out.println("ERROR: "+Ae.getMessage());
+		}
+		return false;
+	}
 }
