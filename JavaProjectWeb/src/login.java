@@ -21,7 +21,8 @@ public class login extends HttpServlet {
 			e.printStackTrace();
 		}
 		if(DatabaseLinker.IsUser(name)) {
-			response.sendRedirect("test.jsp");
+			request.setAttribute("username", name); 
+			request.getRequestDispatcher("profile.jsp").forward(request,response);
 		}else {
 			response.sendRedirect("login.jsp");
 		}
