@@ -7,6 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
+<h2>Welcome   ${username}</h2> 
+<table>
 
+<tr><td>Name</td><td>${name }</td></tr>
+<tr><td>Surname</td><td>${surname }</td></tr>
+<tr><td>Department</td><td>${dep}</td></tr>
+
+</table>
 </body>
 </html>

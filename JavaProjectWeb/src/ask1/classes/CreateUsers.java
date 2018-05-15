@@ -13,11 +13,11 @@ public class CreateUsers {
 		
 		//Secretaries
 		boolean ok=false;
-		Secretaries s=null;
+		Secretarie s=null;
 		while(!ok){
 			try{
 				System.out.print("ΑΦΜ Γραμματεα:\n");
-				s=new Secretaries(reader.nextInt());
+				s=new Secretarie(reader.nextInt());
 				System.out.print("ο Γραμματεας εγγραφθηκε "+"\n");
 				ok=true;
 			}
@@ -36,11 +36,11 @@ public class CreateUsers {
 		
 		//Students
 		ok=false;
-		Students ka=null;
+		Student ka=null;
 		while(!ok){
 			try{
 				System.out.print("ΑΜ Φοιτητη:\n");
-				ka=new Students(reader.nextInt());
+				ka=new Student(reader.nextInt());
 				System.out.print("ο Φοιτητης εγγραφθηκε "+"\n");
 				ok=true;
 			}
@@ -62,8 +62,8 @@ public class CreateUsers {
 		ka.setDepartment(reader.next());
 		
 		System.out.print("###########################\n");
-		System.out.print("Συνολο εγγεγραμμενων User:\n");
-		System.out.print(ka.getUsersCounter()+"\n");
+		//System.out.print("Συνολο εγγεγραμμενων User:\n");
+		//System.out.print(ka.getUsersCounter()+"\n");
 		System.out.print("ΑΜ εγγραμμενου Φοιτητη:\n");
 		System.out.print(ka.getRegistrationNumber()+"\n");
 		System.out.print("Username εγγραμμενου Φοιτητη:\n");
@@ -77,7 +77,7 @@ public class CreateUsers {
 		
 		
 		//Users
-		Users us=new Users();
+		User us=new User();
 		System.out.print("Username User:\n");
 		us.setUsername(reader.next());
 		System.out.print("Ονομα User:\n");	
@@ -88,8 +88,8 @@ public class CreateUsers {
 		us.setDepartment(reader.next());
 		
 		System.out.print("###########################\n");
-		System.out.print("Συνολο εγγεγραμμενων User:\n");
-		System.out.print(us.getUsersCounter()+"\n");
+		//System.out.print("Συνολο εγγεγραμμενων User:\n");
+		//System.out.print(us.getUsersCounter()+"\n");
 		System.out.print("Username εγγραμμενου User:\n");
 		System.out.print(us.getUsername()+"\n");
 		System.out.print("Ονομα εγγραμμενου User:\n");
@@ -101,12 +101,12 @@ public class CreateUsers {
 		
 		
 		//Professors
-		Professors pr=null;
+		Professor pr=null;
 		ok=false;
 		while(!ok){
 			try{
 				System.out.print("ΑΦΜ Καθηγητη:\n");
-				pr=new Professors(reader.nextInt());
+				pr=new Professor(reader.nextInt());
 				System.out.print("ο Καθηγητης εγγραφθηκε "+"\n");
 				ok=true;
 			}
@@ -128,8 +128,8 @@ public class CreateUsers {
 		pr.setDepartment(reader.next());
 		
 		System.out.print("###########################\n");
-		System.out.print("Συνολο εγγεγραμμενων Καθηγητη:\n");
-		System.out.print(pr.getUsersCounter()+"\n");
+		//System.out.print("Συνολο εγγεγραμμενων Καθηγητη:\n");
+		//System.out.print(pr.getUsersCounter()+"\n");
 		System.out.print("Username εγγραμμενου Καθηγητη:\n");
 		System.out.print(pr.getUsername()+"\n");
 		System.out.print("Ονομα εγγραμμενου Καθηγητη:\n");
@@ -157,12 +157,12 @@ public class CreateUsers {
 		}
 		}
 		reader.nextLine();//Στη πρώτη γραμμή έχει τα ονόματα των στηλών, αρα το προσπερνάμε
-		Students tempStud=null;
-		int j=0;
+		Student tempStud=null;
+		//int j=0;
 		while (reader.hasNextLine()){
 			if(reader.hasNext()) {
 		        try{
-	        	tempStud=new Students(Integer.parseInt(reader.next()));//Ο constructor έχει μόνο το ΑΜ
+	        	tempStud=new Student(Integer.parseInt(reader.next()));//Ο constructor έχει μόνο το ΑΜ
 	        	tempStud.setUsername(reader.next());
 	        	tempStud.setName(reader.next());
 	        	tempStud.setSurname(reader.next());
