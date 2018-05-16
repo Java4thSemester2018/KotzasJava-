@@ -1,13 +1,14 @@
 package ask1.classes;
 public class User {
-
+	private Integer userid;
 	private String username;
 	private String name;
 	private String surname;
 	private String department;
 	//private static int usersCounter=0;
 	public User() {}
-	public User(String username,String name,String surname,String department) {
+	public User(Integer userid,String username,String name,String surname,String department) {
+		this.userid =userid;
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
@@ -34,7 +35,9 @@ public class User {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
-	
+	public Integer getUserid() {
+		return userid;
+	}
 	public String getUsername() {
 		return username;
 	}

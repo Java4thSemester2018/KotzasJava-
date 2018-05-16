@@ -14,16 +14,34 @@ public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username=request.getParameter("username");
+		String profession=request.getParameter("pro");
 		if(DatabaseLinker.IsUser(username)) {
 			User user= DatabaseLinker.GetUser(username);
-			request.setAttribute("username", user.getUsername()); 
-			request.setAttribute("name", user.getName()); 
-			request.setAttribute("surname", user.getSurname()); 
-			request.setAttribute("dep", user.getDepartment()); 
-			request.getRequestDispatcher("profile.jsp").forward(request,response);
-		}else {
-			response.sendRedirect("login.jsp");
+			System.out.println(profession);
+			String ProfessionInDB="";
+			switch(profession) {
+				case("Professor"):
+					ProfessionInDB ="professors";
+					break;
+				case("Secretary"):
+					ProfessionInDB ="secretaries";
+					break;
+				case("Student"):
+					ProfessionInDB ="students";
+					break;
+				default:
+					break;
+			}
+			if(DatabaseLinker.IsUserInProfession(user.getUserid(),ProfessionInDB)){
+				request.setAttribute("username", user.getUsername()); 
+				request.setAttribute("name", user.getName()); 
+				request.setAttribute("surname", user.getSurname()); 
+				request.setAttribute("dep", user.getDepartment()); 
+				request.getRequestDispatcher(profession+"Servlet").forward(request,response);
+				return;
+            }
 		}
+		request.setAttribute("message", "Couldn't login ...wrong username or profession");
+		request.getRequestDispatcher("login.jsp").forward(request,response);
 	}
-
 }

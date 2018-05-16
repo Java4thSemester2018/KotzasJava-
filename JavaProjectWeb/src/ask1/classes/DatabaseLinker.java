@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.ResultSetMetaData;
 
 public class DatabaseLinker {
 	
@@ -21,10 +22,11 @@ public class DatabaseLinker {
 			System.out.println("ERROR");
 		}
 	}
-	public static ResultSet RunQuery(String Query){
+	public static List<Map<String, Object>> RunQuery(String Query){
 		Connection c=null;
 		Statement stmt=null;
 		ResultSet rs=null;
+		List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
@@ -38,63 +40,64 @@ public class DatabaseLinker {
 			System.out.println("Connection open:"+(c!=null));
 			rs = stmt.executeQuery(Query);
 			System.out.println("ResultSet open:"+(rs!=null));
-		}
-		catch(Exception Ae){
+			ResultSetMetaData md = rs.getMetaData();
+			int columns = md.getColumnCount();
+			    
+			while (rs.next()){
+				Map<String, Object> row = new HashMap<String, Object>(columns);
+					for(int i = 1; i <= columns; ++i){
+							row.put(md.getColumnName(i), rs.getObject(i));
+						}
+						rows.add(row);
+					}
+			if(rs!=null) {rs.close();}
+			if(stmt!=null) {stmt.close();}
+			if(c!=null) {c.close();}
+			}
+		catch(SQLException Ae){
 			System.out.println("ERROR: "+Ae.getMessage());
 		}
-		
-		return rs;
+
+		return rows;
 		
 	}
 	public static boolean IsUser(String username) {
-		ResultSet rs = RunQuery("SELECT 1 FROM Users WHERE username='"+username+"'");
-		try {
-			boolean exists = rs.next();
-			rs.close();
-			return exists;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return false;
+		List<Map<String, Object>> Rows = RunQuery("SELECT 1 FROM Users WHERE username='"+username+"'");
+		return Rows.size()>0;
 	}
 	public static User GetUser(String username) {
-		ResultSet rs = RunQuery("SELECT * FROM Users WHERE username='"+username+"'");
+		List<Map<String, Object>> Rows = RunQuery("SELECT * FROM Users WHERE username='"+username+"'");
+		Integer userid=-1;
 		String name="";
 		String surname="";
 		String dep="";
-		User User =new User();
-		try {
-			rs.next();
-			name=rs.getString("name");
-			surname=rs.getString("surname");
-			dep=rs.getString("department");
-			User= new User(username,name,surname,dep);
-			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(Rows.size()>0) {
+			userid = (Integer)Rows.get(0).get("userid");
+			name=(String)Rows.get(0).get("name");
+			surname=(String)Rows.get(0).get("surname");
+			dep=(String)Rows.get(0).get("department");
 		}
-		return User;
+		return new User(userid,username,name,surname,dep);
+	}
+	public static boolean IsUserInProfession(Integer userid,String Profession) {
+		boolean exists =false;
+		if(Arrays.asList("professors","secretaries","students").contains(Profession)) {
+			List<Map<String, Object>> Rows = RunQuery("SELECT * FROM "+Profession+" WHERE user_id='"+userid+"'");
+			exists = Rows.size()>0;
+		}
+
+		return exists;
 	}
 	public static List<Course> GetCourses(String Name) {
 		List<Course> courses = new ArrayList<>();
-		ResultSet rs = RunQuery("SELECT * FROM Courses");
-		try {
-			while(rs.next()) {
-				Course course = new Course(rs.getInt("courseid"),rs.getString("coursename"),rs.getString("coursedepartment"),rs.getString("coursesemester"));
-				courses.add(course);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Map<String, Object>> Rows = RunQuery("SELECT * FROM Courses");
+		for (Map<String, Object> row:Rows) {
+			Course course = new Course((Integer)row.get("courseid"),(String)row.get("coursename"),(String)row.get("coursedepartment"),(String)row.get("coursesemester"));
+			courses.add(course);
 		}
-		
 		return courses;
 	}
-	public static ResultSet GetCoursesAndProfessors(String Name) {
+	public static List<Map<String, Object>> GetCoursesAndProfessors() {
 		return RunQuery("Select courses.*, users.name , users.surname from professors,professors_courses,courses,users\n" + 
 				"where (professors.user_id = users.userid) and (professors_courses.professorafm = professors.professorafm) and (professors_courses.course_id = courses.courseid)");
 	}
