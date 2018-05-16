@@ -77,7 +77,7 @@ public class DatabaseLinker {
 			e.printStackTrace();
 		}
 		return User;
-}
+	}
 	public static List<Course> GetCourses(String Name) {
 		List<Course> courses = new ArrayList<>();
 		ResultSet rs = RunQuery("SELECT * FROM Courses");
@@ -97,5 +97,8 @@ public class DatabaseLinker {
 	public static ResultSet GetCoursesAndProfessors(String Name) {
 		return RunQuery("Select courses.*, users.name , users.surname from professors,professors_courses,courses,users\n" + 
 				"where (professors.user_id = users.userid) and (professors_courses.professorafm = professors.professorafm) and (professors_courses.course_id = courses.courseid)");
+	}
+	public static void SetCourseToProfesor(String professorafm,Integer course_id) {
+		RunQuery("INSERT INTO public.professors_courses(professorafm, course_id) VALUES ("+professorafm+","+course_id+");");
 	}
 }
