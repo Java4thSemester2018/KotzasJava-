@@ -14,7 +14,7 @@ public class Secretary extends User{
 	//βαθμούς να μην είναι αναγκιαία η δημιουργία και αντικειμένου Secretaries
 	
 	
-	public Secretarie(int k) {
+	public Secretar(int k) {
 		super();
 		secretaryAFM = k;
 	}
