@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h2>Welcome   ${username}</h2> 
+<h2>Welcome  </h2><h2 value=name> ${username}</h2> 
  
  
  

@@ -1,15 +1,14 @@
 package ask2.servlets;
 
-import ask1.classes.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import ask1.classes.DatabaseLinker;
 
 /**
  * Servlet implementation class SecretaryServlet
@@ -47,10 +46,24 @@ public class SecretaryServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		String option = request.getParameter("option");
+
+		String name = request.getParameter("name");
+		request.setAttribute("username",name);
+
         try {
              switch (option) {
                  case "Classes":
-                     //3.4.2 request.setAttribute("img", "apples.jpg");
+                	 //3.4.2 request.setAttribute("img", "apples.jpg");
+        	 		 List<Courses> cr= DatabaseLinker.GetCourses();
+        	 		 String s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
+        	 		 for(String crname:cr) {
+        	 			 s += "<tr>";
+        	 			 s+="<td> "+crname+"</td>";
+        	 			 s += "</tr>";
+        	 		 }
+        	 		 s+="</table>";
+                	 request.setAttribute("output",s);
+
                      break;
 
                  case "Professors":
