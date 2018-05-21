@@ -32,8 +32,8 @@ public class Student extends User {
 	public int ReturnGrade(String courseID){//Επιστρέφει απο την γραμματεία το βαθμό
 		//Ψάχνει αν υπάρχει το courseID
 		boolean exists=true;
-		for (int i=0;i<Secretarie.courses.size();i++){
-			if (courseID.equals((Secretarie.courses.get(i)))){
+		for (int i=0;i<Secretary.courses.size();i++){
+			if (courseID.equals((Secretary.courses.get(i)))){
 				exists=true;
 				break;
 			}
@@ -43,10 +43,10 @@ public class Student extends User {
 		}
 		if (exists){
 			//Αν υπάρχει πρέπει να το έχει και το grades
-			for (int i=0;i<Secretarie.grades.size();i++){
-				if (registrationNumber==(((Grade)Secretarie.grades.get(i)).getStudentRegistrationNumber())){
-					if (courseID.equals(((Grade)Secretarie.grades.get(i)).getCourseID())){
-						return ((Grade)Secretarie.grades.get(i)).getGrade();
+			for (int i=0;i<Secretary.grades.size();i++){
+				if (registrationNumber==(((Grade)Secretary.grades.get(i)).getStudentRegistrationNumber())){
+					if (courseID.equals(((Grade)Secretary.grades.get(i)).getCourseID())){
+						return ((Grade)Secretary.grades.get(i)).getGrade();
 					}
 				}
 			}

@@ -13,11 +13,11 @@ public class CreateUsers {
 		
 		//Secretaries
 		boolean ok=false;
-		Secretarie s=null;
+		Secretary s=null;
 		while(!ok){
 			try{
 				System.out.print("ΑΦΜ Γραμματεα:\n");
-				s=new Secretarie(reader.nextInt());
+				s=new Secretary(reader.nextInt());
 				System.out.print("ο Γραμματεας εγγραφθηκε "+"\n");
 				ok=true;
 			}

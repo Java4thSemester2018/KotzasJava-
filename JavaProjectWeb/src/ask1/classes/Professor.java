@@ -37,7 +37,7 @@ public class Professor extends User{
 		for (String course : courseIDs) {
 			System.out.println("Course: ");
 			
-			for (Grade grade : Secretarie.grades) {
+			for (Grade grade : Secretary.grades) {
 				if(grade.getCourseID()==course) { //Ελέγχει για κάθε βαθμό αν αντιστοιχίζεται το μάθημα
 					System.out.println(grade.getStudentRegistrationNumber()+": "+grade.getGrade());
 				}
