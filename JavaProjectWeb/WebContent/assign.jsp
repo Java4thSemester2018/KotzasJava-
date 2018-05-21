@@ -11,9 +11,10 @@
 <body>
 <h2>Welcome  </h2><h2 value=name> ${username}</h2> 
  
-<form action = "${pageContext.request.contextPath}/SecretaryServlet" method = "get">
+<form action = "${pageContext.request.contextPath}/SecretaryServlet" method = "post">
                 	 		<p>Professor AFM</p><input required name="professorafm" />
                 	 		<p>Course ID</p><input required name="courseid" />
+                	 		<input type="hidden" name="assign" value="true" />
                 	 		<input type="submit"/>
 </form>
 ${queryresult}

@@ -5,14 +5,20 @@ public class User {
 	private String name;
 	private String surname;
 	private String department;
+	private String role;
 	//private static int usersCounter=0;
 	public User() {}
 	public User(Integer userid,String username,String name,String surname,String department) {
+		this(userid, username,name,surname,department,"guest");
+	}
+	public User(Integer userid,String username,String name,String surname,String department,String role) {
+		
 		this.userid =userid;
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
 		this.department = department;
+		this.role = role;
 		//usersCounter++;
 	}
 	
@@ -53,7 +59,9 @@ public class User {
 	public String getDepartment() {
 		return department;
 	}
-	
+	public String getRole() {
+		return role;
+	}
 	//public int getUsersCounter() {
 	//	return usersCounter;
 	//}

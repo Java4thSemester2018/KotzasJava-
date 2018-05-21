@@ -31,35 +31,28 @@ public class SecretaryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int profafm;
-		int courseid;
-		try {
-			courseid=Integer.parseInt(request.getParameter("courseid"));
-			profafm = Integer.parseInt(request.getParameter("professorafm"));
-		}catch(Exception AE) {
-			String e ="error";
-			request.setAttribute("queryresult",e);
-
-			return;
-		}
-		if (!DatabaseLinker.SetCourseToProfessor(profafm,courseid)) {
-			String e ="error";
-			request.setAttribute("queryresult",e);
-		}else {
-			String e="Done!";
-			request.setAttribute("queryresult",e);
-			
-		}
-		request.getRequestDispatcher("SecreteryServlet").forward(request, response);
+		request.getRequestDispatcher("Secretary.jsp").forward(request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		String option = request.getParameter("option");
-
+		boolean fromAssign = request.getParameter("assign")!=null;
 		String name = request.getParameter("name");
 		request.setAttribute("username",name);
 		String s="";
+		if(fromAssign) {
+    		try {
+    			int courseid = Integer.parseInt(request.getParameter("courseid"));
+    			int profafm = Integer.parseInt(request.getParameter("professorafm"));
+    			boolean done = DatabaseLinker.SetCourseToProfessor(profafm,courseid);
+    			System.out.println("done="+done);
+    		}catch(Exception Ae) {
+    			
+    			Ae.printStackTrace();
+    		}
+    		
+    	 }
         try {
              switch (option) {
                  case "Classes":
@@ -102,17 +95,16 @@ public class SecretaryServlet extends HttpServlet {
                 	 }
                 	 break;
                  case "Assign":
-                	 		request.getRequestDispatcher("assign.jsp").forward(request, response);
-                	 break;
+                	 System.out.println("fromAssign="+fromAssign);
+                     request.getRequestDispatcher("assign.jsp").forward(request, response);
+                	 return;
                  default:
                 	 
              }
         }
         catch (Exception e){
+            
         }
-         request.getRequestDispatcher("Secretary.jsp").forward(request, response);
-		
-        }
-	
-
+        request.getRequestDispatcher("Secretary.jsp").forward(request, response);
+	}
 }

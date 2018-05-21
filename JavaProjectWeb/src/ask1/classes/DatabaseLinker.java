@@ -92,7 +92,7 @@ public class DatabaseLinker {
 		LoadJDBCDriver();
 		HaveOpenConection();
 		try {
-			stmt = connection.prepareStatement("SELECT 1 FROM Users WHERE username=?");
+			stmt = connection.prepareStatement("SELECT 1 FROM public.User WHERE username=?");
 
 			stmt.setString(1, username);
 			rs = stmt.executeQuery();
@@ -113,13 +113,13 @@ public class DatabaseLinker {
 		LoadJDBCDriver();
 		HaveOpenConection();
 		try {
-			stmt = connection.prepareStatement("SELECT * FROM Users WHERE username=?");
+			stmt = connection.prepareStatement("SELECT * FROM public.User WHERE username=?");
 
 			stmt.setString(1, username);
 
 			rs = stmt.executeQuery();
 			if(rs.next()) {
-				user = new User(rs.getInt("userid"),username,rs.getString("name"),rs.getString("surname"),rs.getString("department"));
+				user = new User(rs.getInt("userid"),username,rs.getString("name"),rs.getString("surname"),rs.getString("department"),rs.getString("user_role"));
 			}
 			if (stmt != null) { stmt.close();}
 			if (rs != null) { rs.close();}
@@ -134,7 +134,7 @@ public class DatabaseLinker {
 		PreparedStatement stmt=null;
 		LoadJDBCDriver();
 		HaveOpenConection();
-		if(Arrays.asList("professors","secretaries","students").contains(Profession)) {
+		if(Arrays.asList("professor","secretary","student").contains(Profession)) {
 			try {
 				stmt = connection.prepareStatement("SELECT * FROM "+Profession+" WHERE user_id=?");
 				stmt.setInt(1, userid);
@@ -160,7 +160,7 @@ public class DatabaseLinker {
 		HaveOpenConection();
 		try {
 			stmt = connection.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM Courses");
+			rs = stmt.executeQuery("SELECT * FROM Course");
 			while (rs.next()) {
 				Course course = new Course(rs.getInt("courseid"),rs.getString("coursename"),rs.getString("coursedepartment"),rs.getString("coursesemester"));
 				courses.add(course);
@@ -181,8 +181,8 @@ public class DatabaseLinker {
 		HaveOpenConection();
 		try {
 			stmt = connection.createStatement();
-			rs = stmt.executeQuery("Select courses.*, users.name , users.surname from professors,professors_courses,courses,users\n" + 
-					"where (professors.user_id = users.userid) and (professors_courses.professorafm = professors.professorafm) and (professors_courses.course_id = courses.courseid)");
+			rs = stmt.executeQuery("Select course.*, public.user.name , public.user.surname from professor,professor_course,course,public.user\n" + 
+					"where (professor.user_id = public.user.userid) and (professor_course.professorafm = professor.professorafm) and (professor_course.course_id = course.courseid)");
 			lm = RSToLM(rs);
 			if (stmt != null) { stmt.close();}
 			if (rs != null) { rs.close();}
@@ -196,30 +196,46 @@ public class DatabaseLinker {
 		ResultSet rs=null;
 		PreparedStatement stmt=null;
 		LoadJDBCDriver();
-		HaveOpenConection();
+		
 		try {
-			stmt = connection.prepareStatement("SELECT * FROM PROFESSORS WHERE professorafm=?");
+			
+			stmt = connection.prepareStatement("SELECT * FROM PROFESSOR WHERE professorafm=?");
 			stmt.setInt(1, professorafm);
+			HaveOpenConection();
 			rs = stmt.executeQuery();
 			if(!rs.next()) {
 				if (stmt != null) { stmt.close();}
 				if (rs != null) { rs.close();}
 				return false;
 			}
-			stmt = connection.prepareStatement("SELECT * FROM COURSES WHERE courseid=?");
+			HaveOpenConection();
+			stmt = connection.prepareStatement("SELECT * FROM COURSE WHERE courseid=?");
 			stmt.setInt(1, course_id);
+			rs = stmt.executeQuery();
 			if(!rs.next()) {
 				if (stmt != null) { stmt.close();}
 				if (rs != null) { rs.close();}
 				return false;
 			}
-			stmt = connection.prepareStatement("INSERT INTO public.professors_courses(professorafm, course_id) VALUES (?,?)");
+			
+			stmt = connection.prepareStatement("select * from professor_course where professorafm=? and course_id=?");
 			stmt.setInt(1, professorafm);
 			stmt.setInt(2, course_id);
 			rs = stmt.executeQuery();
+			if(rs.next()) {
+				if (stmt != null) { stmt.close();}
+				if (rs != null) { rs.close();}
+				return false;
+			}
+			stmt = connection.prepareStatement("INSERT INTO professor_course(professorafm, course_id) VALUES (?,?)");
+			stmt.setInt(1, professorafm);
+			stmt.setInt(2, course_id);
+			HaveOpenConection();
+			stmt.execute();
 			if (stmt != null) { stmt.close();}
 			if (rs != null) { rs.close();}
 			return true;
+			
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
