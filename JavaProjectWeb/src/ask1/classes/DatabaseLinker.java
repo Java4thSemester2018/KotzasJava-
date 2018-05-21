@@ -101,7 +101,25 @@ public class DatabaseLinker {
 		return RunQuery("Select courses.*, users.name , users.surname from professors,professors_courses,courses,users\n" + 
 				"where (professors.user_id = users.userid) and (professors_courses.professorafm = professors.professorafm) and (professors_courses.course_id = courses.courseid)");
 	}
-	public static void SetCourseToProfesor(String professorafm,Integer course_id) {
-		RunQuery("INSERT INTO public.professors_courses(professorafm, course_id) VALUES ("+professorafm+","+course_id+");");
+	public static boolean SetCourseToProfessor(String professorafm,Integer course_id) {
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Map<String, Object>> rows = RunQuery("SELECT * FROM PROFESSORS WHERE \"professorafm\"="+Integer.parseInt(professorafm));
+		if(rows.size()>0) {
+			 rows = RunQuery("SELECT * FROM COURSES WHERE \"courseid\"="+course_id);
+			 if(rows.size()>0) {
+				 RunQuery("INSERT INTO public.professors_courses(professorafm, course_id) VALUES ("+professorafm+","+course_id+")");
+				 return true;
+			 }
+			 else {
+				 return false;
+			 }
+		}else {
+			return false;
+		}
 	}
 }

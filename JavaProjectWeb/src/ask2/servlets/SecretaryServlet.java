@@ -1,6 +1,8 @@
 package ask2.servlets;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,10 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ask1.classes.DatabaseLinker;
 import ask1.classes.Course;
-import java.util.List;
-import java.util.Map;
+import ask1.classes.DatabaseLinker;
 /**
  * Servlet implementation class SecretaryServlet
  */
@@ -31,19 +31,26 @@ public class SecretaryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-//		response.setContentType("text/html");
-//		try {
-//		    request.getRequestDispatcher("/profile.jsp").include(request, response);
-//		  } catch (ServletException e) {
-//		    e.printStackTrace();
-//		  }
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+		String profafm=request.getParameter("professorafm");
+		int courseid;
+		try {
+			courseid=Integer.parseInt(request.getParameter("courseid"));
+		}catch(Exception AE) {
+			String e ="error";
+			request.setAttribute("queryresult",e);
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+			return;
+		}
+		if (!DatabaseLinker.SetCourseToProfessor(profafm,courseid)) {
+			String e ="error";
+			request.setAttribute("queryresult",e);
+		}else {
+			String e="Done!";
+			request.setAttribute("queryresult",e);
+			
+		}
+		request.getRequestDispatcher("assign.jsp").forward(request, response);
+	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
@@ -58,6 +65,7 @@ public class SecretaryServlet extends HttpServlet {
                 	 //3.4.2 request.setAttribute("img", "apples.jpg");
         	 		 List<Course> crs= DatabaseLinker.GetCourses();
         	 		 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
+        	 		 s+="<tr><th>Courses</th></tr>\n";
         	 		 for(Course cr:crs) {
         	 			 s += "<tr>";
         	 			 s+="<td> "+cr.getCourseName()+"</td>";
@@ -92,7 +100,7 @@ public class SecretaryServlet extends HttpServlet {
                 	 request.setAttribute("output",s);
                 	 break;
                  case "Assign":
-                	 //3.4.4
+                	 		request.getRequestDispatcher("assign.jsp").forward(request, response);
                 	 break;
                  default:
                 	 
