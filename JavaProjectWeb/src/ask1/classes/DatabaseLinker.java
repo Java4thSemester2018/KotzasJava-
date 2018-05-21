@@ -88,7 +88,7 @@ public class DatabaseLinker {
 
 		return exists;
 	}
-	public static List<Course> GetCourses(String Name) {
+	public static List<Course> GetCourses() {
 		List<Course> courses = new ArrayList<>();
 		List<Map<String, Object>> Rows = RunQuery("SELECT * FROM Courses");
 		for (Map<String, Object> row:Rows) {

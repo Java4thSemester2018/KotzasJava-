@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ask1.classes.DatabaseLinker;
-
+import ask1.classes.Course;
+import java.util.List;
+import java.util.Map;
 /**
  * Servlet implementation class SecretaryServlet
  */
@@ -49,16 +51,16 @@ public class SecretaryServlet extends HttpServlet {
 
 		String name = request.getParameter("name");
 		request.setAttribute("username",name);
-
+		String s="";
         try {
              switch (option) {
                  case "Classes":
                 	 //3.4.2 request.setAttribute("img", "apples.jpg");
-        	 		 List<Courses> cr= DatabaseLinker.GetCourses();
-        	 		 String s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
-        	 		 for(String crname:cr) {
+        	 		 List<Course> crs= DatabaseLinker.GetCourses();
+        	 		 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
+        	 		 for(Course cr:crs) {
         	 			 s += "<tr>";
-        	 			 s+="<td> "+crname+"</td>";
+        	 			 s+="<td> "+cr.getCourseName()+"</td>";
         	 			 s += "</tr>";
         	 		 }
         	 		 s+="</table>";
@@ -72,7 +74,7 @@ public class SecretaryServlet extends HttpServlet {
                 	 
                 	 List<Map<String, Object>> Rows = DatabaseLinker.GetCoursesAndProfessors();
                 	 
-                	 String s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
+                	 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
                 	 for (Map<String, Object> row:Rows) {
                 		 s += "<tr> \n";
                 		 for (Map.Entry<String, Object> rowEntry : row.entrySet()) {
