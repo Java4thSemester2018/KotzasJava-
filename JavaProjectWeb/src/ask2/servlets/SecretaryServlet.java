@@ -31,10 +31,11 @@ public class SecretaryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String profafm=request.getParameter("professorafm");
+		int profafm;
 		int courseid;
 		try {
 			courseid=Integer.parseInt(request.getParameter("courseid"));
+			profafm = Integer.parseInt(request.getParameter("professorafm"));
 		}catch(Exception AE) {
 			String e ="error";
 			request.setAttribute("queryresult",e);
@@ -49,7 +50,7 @@ public class SecretaryServlet extends HttpServlet {
 			request.setAttribute("queryresult",e);
 			
 		}
-		request.getRequestDispatcher("assign.jsp").forward(request, response);
+		request.getRequestDispatcher("SecreteryServlet").forward(request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -63,7 +64,9 @@ public class SecretaryServlet extends HttpServlet {
              switch (option) {
                  case "Classes":
                 	 //3.4.2 request.setAttribute("img", "apples.jpg");
+                	 
         	 		 List<Course> crs= DatabaseLinker.GetCourses();
+        	 		if(crs.size()>0) {
         	 		 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
         	 		 s+="<tr><th>Courses</th></tr>\n";
         	 		 for(Course cr:crs) {
@@ -73,7 +76,7 @@ public class SecretaryServlet extends HttpServlet {
         	 		 }
         	 		 s+="</table>";
                 	 request.setAttribute("output",s);
-
+        	 		}
                      break;
 
                  case "Professors":
@@ -81,7 +84,7 @@ public class SecretaryServlet extends HttpServlet {
                 	 //response.setContentType("text/html");
                 	 
                 	 List<Map<String, Object>> Rows = DatabaseLinker.GetCoursesAndProfessors();
-                	 
+                	 if(Rows.size()>0) {
                 	 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
                 	 s += "<tr> \n";
                 		 for (Map.Entry<String, Object> rowEntry : Rows.get(0).entrySet()) {
@@ -96,6 +99,7 @@ public class SecretaryServlet extends HttpServlet {
                 		 s += "</tr>\n";
                 		 }
                 	 request.setAttribute("output",s);
+                	 }
                 	 break;
                  case "Assign":
                 	 		request.getRequestDispatcher("assign.jsp").forward(request, response);
