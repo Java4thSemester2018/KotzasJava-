@@ -83,13 +83,11 @@ public class SecretaryServlet extends HttpServlet {
                 	 List<Map<String, Object>> Rows = DatabaseLinker.GetCoursesAndProfessors();
                 	 
                 	 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
-                	 for (Map<String, Object> row:Rows) {
-                		 s += "<tr> \n";
-                		 for (Map.Entry<String, Object> rowEntry : row.entrySet()) {
+                	 s += "<tr> \n";
+                		 for (Map.Entry<String, Object> rowEntry : Rows.get(0).entrySet()) {
                 			 s+= "<th>"+rowEntry.getKey()+"</th>\n";
                 		 }
-                		 s += "</tr>\n";
-                	 }
+                	 s += "</tr>\n";
                 	 for (Map<String, Object> row:Rows) {
                 		 s += "<tr> \n";
                 		 for (Map.Entry<String, Object> rowEntry : row.entrySet()) {
