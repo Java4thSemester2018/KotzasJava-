@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h2>Welcome  </h2><h2 value=name> ${username}</h2> 
+<h2>Welcome ${username}</h2> 
  
 <form action = "${pageContext.request.contextPath}/SecretaryServlet" method = "post">
                 	 		<p>Professor AFM</p><input required name="professorafm" />

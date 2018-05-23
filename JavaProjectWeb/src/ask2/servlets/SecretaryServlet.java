@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ask1.classes.Course;
 import ask1.classes.DatabaseLinker;
@@ -36,10 +37,10 @@ public class SecretaryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+        HttpSession session = request.getSession(true);
 		String option = request.getParameter("option");
 		boolean fromAssign = request.getParameter("assign")!=null;
 		String name = request.getParameter("name");
-		request.setAttribute("username",name);
 		String s="";
 		if(fromAssign) {
     		try {

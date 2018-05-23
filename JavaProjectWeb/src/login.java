@@ -1,11 +1,14 @@
 import java.io.IOException;
 
-import ask1.classes.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import ask1.classes.DatabaseLinker;
+import ask1.classes.User;
 /**
  * Servlet implementation class login
  */
@@ -20,13 +23,13 @@ public class login extends HttpServlet {
 		String profession=request.getParameter("pro");
 		if(DatabaseLinker.IsUser(username)) {
 			User user= DatabaseLinker.GetUser(username);
-			System.out.println(profession);
 			if(user.getRole()!="guest"){
-				request.setAttribute("username", user.getUsername()); 
-				request.setAttribute("name", user.getName()); 
-				request.setAttribute("surname", user.getSurname()); 
-				request.setAttribute("dep", user.getDepartment()); 
-				request.setAttribute("role", user.getRole());
+		        HttpSession session = request.getSession(true);
+				session.setAttribute("username", user.getUsername()); 
+				session.setAttribute("name", user.getName()); 
+				session.setAttribute("surname", user.getSurname()); 
+				session.setAttribute("dep", user.getDepartment()); 
+				session.setAttribute("role", user.getRole());
 				request.getRequestDispatcher(Character.toUpperCase(user.getRole().charAt(0)) + user.getRole().substring(1)+"Servlet").forward(request,response);
 				return;
             }
