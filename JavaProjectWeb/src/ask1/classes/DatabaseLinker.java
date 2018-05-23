@@ -181,7 +181,7 @@ public class DatabaseLinker {
 		HaveOpenConection();
 		try {
 			stmt = connection.createStatement();
-			rs = stmt.executeQuery("Select course.*, public.user.name , public.user.surname from professor,professor_course,course,public.user\n" + 
+			rs = stmt.executeQuery("Select course.*, public.user.name , public.user.surname,professor.professorafm from professor,professor_course,course,public.user\n" + 
 					"where (professor.user_id = public.user.userid) and (professor_course.professorafm = professor.professorafm) and (professor_course.course_id = course.courseid)");
 			lm = RSToLM(rs);
 			if (stmt != null) { stmt.close();}

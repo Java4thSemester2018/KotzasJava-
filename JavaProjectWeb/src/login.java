@@ -20,7 +20,6 @@ public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username=request.getParameter("username");
-		String profession=request.getParameter("pro");
 		if(DatabaseLinker.IsUser(username)) {
 			User user= DatabaseLinker.GetUser(username);
 			if(user.getRole()!="guest"){

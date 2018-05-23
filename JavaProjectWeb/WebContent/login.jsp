@@ -18,13 +18,6 @@
 				<tr><td>Name:</td>
 					<td><input required id="username" type="text" name="username"></td>
 				</tr>
-				<tr><td>Profession:</td>
-					<td><select required name="pro">
-							<option value="Professor">Professor</option>
-							<option value="Secretary">Secretary</option>
-							<option value="Student">Student</option>
-					</select></td>
-				</tr>
 			</table>
             <input type="submit" value="login"/>
             <br></br>

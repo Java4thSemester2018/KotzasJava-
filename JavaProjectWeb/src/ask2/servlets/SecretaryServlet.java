@@ -69,10 +69,11 @@ public class SecretaryServlet extends HttpServlet {
         	 		 List<Course> crs= DatabaseLinker.GetCourses();
         	 		if(crs.size()>0) {
         	 		 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
-        	 		 s+="<tr><th>Courses</th></tr>\n";
+        	 		 s+="<tr><th>Course Name</th><th>Course Id</th></tr>\n";
         	 		 for(Course cr:crs) {
         	 			 s += "<tr>";
         	 			 s+="<td> "+cr.getCourseName()+"</td>";
+        	 			s+="<td> "+cr.getCourseId()+"</td>";
         	 			 s += "</tr>";
         	 		 }
         	 		 s+="</table>";

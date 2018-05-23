@@ -5,7 +5,7 @@
 <% 
 	if (session.getAttribute("username") == null){
 			System.out.println("ERROR");
-		    response.sendRedirect("login.jsp");
+		    response.sendRedirect("login");
     }else{
     	System.out.println("GOOD");
     }
