@@ -38,9 +38,11 @@ public class SecretaryServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
         HttpSession session = request.getSession(true);
+        if (!session.getAttribute("role").equals("secretary")){
+        	response.sendRedirect("login");
+        }
 		String option = request.getParameter("option");
 		boolean fromAssign = request.getParameter("assign")!=null;
-		String name = request.getParameter("name");
 		String s="";
 		if(fromAssign) {
     		try {
@@ -52,7 +54,6 @@ public class SecretaryServlet extends HttpServlet {
     			}
     			else {
     			request.setAttribute("output","Error");
-
     			}
     			request.getRequestDispatcher("Secretary.jsp").forward(request, response);
     		}catch(Exception Ae) {
@@ -69,11 +70,12 @@ public class SecretaryServlet extends HttpServlet {
         	 		 List<Course> crs= DatabaseLinker.GetCourses();
         	 		if(crs.size()>0) {
         	 		 s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
-        	 		 s+="<tr><th>Course Name</th><th>Course Id</th></tr>\n";
+        	 		 s+="<tr><th>Course Id</th><th>Course Name</th></tr>\n";
         	 		 for(Course cr:crs) {
         	 			 s += "<tr>";
-        	 			 s+="<td> "+cr.getCourseName()+"</td>";
         	 			s+="<td> "+cr.getCourseId()+"</td>";
+        	 			 s+="<td> "+cr.getCourseName()+"</td>";
+        	 			
         	 			 s += "</tr>";
         	 		 }
         	 		 s+="</table>";
