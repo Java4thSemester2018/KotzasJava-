@@ -47,7 +47,14 @@ public class SecretaryServlet extends HttpServlet {
     			int courseid = Integer.parseInt(request.getParameter("courseid"));
     			int profafm = Integer.parseInt(request.getParameter("professorafm"));
     			boolean done = DatabaseLinker.SetCourseToProfessor(profafm,courseid);
-    			System.out.println("done="+done);
+    			if (done) {
+    			request.setAttribute("output","Done!");
+    			}
+    			else {
+    			request.setAttribute("output","Error");
+
+    			}
+    			request.getRequestDispatcher("Secretary.jsp").forward(request, response);
     		}catch(Exception Ae) {
     			
     			Ae.printStackTrace();
@@ -96,7 +103,6 @@ public class SecretaryServlet extends HttpServlet {
                 	 }
                 	 break;
                  case "Assign":
-                	 System.out.println("fromAssign="+fromAssign);
                      request.getRequestDispatcher("assign.jsp").forward(request, response);
                 	 return;
                  default:

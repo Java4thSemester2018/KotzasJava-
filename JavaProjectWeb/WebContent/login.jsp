@@ -8,7 +8,11 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-		<h1>Login:</h1>
+    <div class="headertop">
+    <h3><strong>LOGIN</strong></h3>
+    </div>
+    <br>
+    <div class="loginbox">
 		<form action="${pageContext.request.contextPath}/login" method="post"> 
 			<table border="0" width="500" align="center">
 				<tr><td>Name:</td>
@@ -22,10 +26,14 @@
 					</select></td>
 				</tr>
 			</table>
-			<h6>${message}</h6>
-			<input type="submit" value="login"/>
-	</form>  
+            <input type="submit" value="login"/>
+            <br></br>
+        </form>  
+    </div>
+    <h6>${message}</h6>
 </body>
 </html>
+
+
 
 

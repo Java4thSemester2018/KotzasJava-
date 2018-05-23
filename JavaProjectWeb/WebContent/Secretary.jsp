@@ -3,7 +3,7 @@
    <%@ page import = "java.io.*,java.util.*" %>
    
 <% 
-	if (session.isNew()){
+	if (session.getAttribute("username") == null){
 			System.out.println("ERROR");
 		    response.sendRedirect("login.jsp");
     }else{
@@ -16,13 +16,16 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Welcome ${username}</title>
 </head>
 <body>
-<h2>Welcome ${username}</h2> 
- 
- 
- 
+<div class="headertop">
+<h3>Welcome ${username}</h3> 
+
+
+</div>
+<br>
+ <div class="loginbox">
  <form action = "${pageContext.request.contextPath}/SecretaryServlet"  method = "post">
 	<p>Choose an option:</p>
 		<input type="radio" name="option" id="option" value="Classes" >Show all classes available<br><br>
@@ -32,6 +35,7 @@
 		
 		<input type="submit" value="GO">
  </form>
+ </div>
 ${output}
 
 </body>
