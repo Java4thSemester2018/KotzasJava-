@@ -1,3 +1,4 @@
+package servlets;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -7,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ask1.classes.DatabaseLinker;
-import ask1.classes.User;
+import classes.DatabaseLinker;
+import classes.User;
 /**
  * Servlet implementation class login
  */
@@ -33,7 +34,7 @@ public class login extends HttpServlet {
 				return;
             }
 		}
-		request.setAttribute("message", "Couldn't login ...wrong username or profession");
+		request.setAttribute("message", "Couldn't login ...wrong username");
 		request.getRequestDispatcher("login.jsp").forward(request,response);
 	}
 }

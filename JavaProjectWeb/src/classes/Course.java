@@ -1,4 +1,4 @@
-package ask1.classes;
+package classes;
 public class Course {
 	private int courseId ;
 	private String courseName;

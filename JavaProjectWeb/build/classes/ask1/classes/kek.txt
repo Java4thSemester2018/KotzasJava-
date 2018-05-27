@@ -1,3 +1,0 @@
-﻿RegCode,Username,Name,Surname,Department
-31,kek,kik,kok,lel
-32,kek,klk,kok,lel

@@ -1,4 +1,4 @@
-package ask1.classes;
+package classes;
 public class User {
 	private Integer userid;
 	private String username;

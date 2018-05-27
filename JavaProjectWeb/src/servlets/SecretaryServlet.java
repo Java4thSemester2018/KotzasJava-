@@ -1,4 +1,4 @@
-package ask2.servlets;
+package servlets;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ask1.classes.Course;
-import ask1.classes.DatabaseLinker;
+import classes.Course;
+import classes.DatabaseLinker;
 /**
  * Servlet implementation class SecretaryServlet
  */
@@ -44,7 +44,7 @@ public class SecretaryServlet extends HttpServlet {
 		String option = request.getParameter("option");
 		boolean fromAssign = request.getParameter("assign")!=null;
 		String s="";
-		if(fromAssign) {
+		if(fromAssign && (request.getParameter("courseid") != null) && (request.getParameter("professorafm")!=null)) {
     		try {
     			int courseid = Integer.parseInt(request.getParameter("courseid"));
     			int profafm = Integer.parseInt(request.getParameter("professorafm"));

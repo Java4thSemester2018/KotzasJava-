@@ -1,4 +1,4 @@
-package ask1.classes;
+package classes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
