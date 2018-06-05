@@ -3,8 +3,12 @@
    <%@ page import = "java.io.*,java.util.*" %>
    
 <% 
-	System.out.println(session.getAttribute("role"));
+try{
 if (!session.getAttribute("role").equals("secretary")){
+	response.sendRedirect("login");
+}
+}
+catch(Exception AE){
 	response.sendRedirect("login");
 }
 %>
