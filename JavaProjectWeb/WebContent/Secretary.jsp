@@ -3,7 +3,12 @@
    <%@ page import = "java.io.*,java.util.*" %>
    
 <% 
+try{
 if (!session.getAttribute("role").equals("secretary")){
+	response.sendRedirect("login");
+}
+}
+catch(Exception AE){
 	response.sendRedirect("login");
 }
 %>
@@ -19,7 +24,6 @@ if (!session.getAttribute("role").equals("secretary")){
 <div class="headertop">
 <h3>Welcome ${name} ${surname}</h3> 
 
-
 </div>
 <br>
  <div class="loginbox">
@@ -32,6 +36,9 @@ if (!session.getAttribute("role").equals("secretary")){
 		
 		<input type="submit" value="GO">
  </form>
+ <form action = "${pageContext.request.contextPath}/logout"  method = "post">
+	<input type="submit" value="LOGOUT">
+</form>
  </div>
 ${output}
 
