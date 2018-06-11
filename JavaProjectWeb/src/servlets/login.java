@@ -21,8 +21,9 @@ public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username=request.getParameter("username");
+		String password=request.getParameter("username");
 		if(DatabaseLinker.IsUser(username)) {
-			User user= DatabaseLinker.GetUser(username);
+			User user= DatabaseLinker.GetUser(username,password);
 			if(user.getRole()!="guest"){
 		        HttpSession session = request.getSession(true);
 				session.setAttribute("username", user.getUsername()); 

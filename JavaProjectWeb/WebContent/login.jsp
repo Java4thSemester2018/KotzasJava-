@@ -17,6 +17,7 @@
 			<table border="0" width="500" align="center">
 				<tr><td>Name:</td>
 					<td><input required id="username" type="text" name="username"></td>
+					<td><input required id="password" type="password" name="password"></td>
 				</tr>
 			</table>
             <input type="submit" value="login"/>

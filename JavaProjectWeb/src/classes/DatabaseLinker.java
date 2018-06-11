@@ -23,7 +23,7 @@ public class DatabaseLinker {
 			System.out.println("ERROR");
 		}
 	}
-
+	//support functions
 	public static void LoadJDBCDriver() {
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -82,10 +82,9 @@ public class DatabaseLinker {
 		catch(SQLException Ae){
 			System.out.println("ERROR: "+Ae.getMessage());
 		}
-
 		return rows;
-		
 	}
+	//general requests
 	public static boolean IsUser(String username) {
 		ResultSet rs=null;
 		PreparedStatement stmt;
@@ -106,7 +105,7 @@ public class DatabaseLinker {
 		}
 		return false;
 	}
-	public static User GetUser(String username) {
+	public static User GetUser(String username,String password) {
 		ResultSet rs=null;
 		PreparedStatement stmt=null;
 		User user = new User(-1,"","","","");
@@ -118,7 +117,8 @@ public class DatabaseLinker {
 			stmt.setString(1, username);
 
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			if(rs.next() && rs.getString("password") == password) {
+				
 				user = new User(rs.getInt("userid"),username,rs.getString("name"),rs.getString("surname"),rs.getString("department"),rs.getString("user_role"));
 			}
 			if (stmt != null) { stmt.close();}
@@ -152,6 +152,7 @@ public class DatabaseLinker {
 
 		return false;
 	}
+	//Secretary requests
 	public static List<Course> GetCourses() {
 		List<Course> courses = new ArrayList<>();
 		ResultSet rs=null;
@@ -242,4 +243,126 @@ public class DatabaseLinker {
 		}
 		return false;
 	}
+	//student requests
+	public static List<Map<String, Object>> GetStudentGradeByCourse(int StudentID,int CourseID) {
+		List<Map<String, Object>> lm = new ArrayList<>();
+		ResultSet rs=null;
+		PreparedStatement stmt=null;
+		LoadJDBCDriver();
+		HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("SELECT * FROM public.grade WHERE studentid=? and course_id=?");
+
+			stmt.setInt(1, StudentID);
+			stmt.setInt(2, CourseID);
+			
+			rs = stmt.executeQuery();
+			lm = RSToLM(rs) ;
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+			
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lm;
+	}
+	public static List<Map<String, Object>> GetStudentGradeByCourseSemester(int StudentID,int CourseSemester) {
+		List<Map<String, Object>> lm = new ArrayList<>();
+		ResultSet rs=null;
+		PreparedStatement stmt=null;
+		LoadJDBCDriver();
+		HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("select public.course.coursename,public.grade.grade from public.grade,public.course \n" + 
+					"where grade.studentid=?  and grade.course_id = course.id and course.coursesemester=?");
+
+			stmt.setInt(1, StudentID);
+			stmt.setInt(2, CourseSemester);
+			
+			rs = stmt.executeQuery();
+			lm = RSToLM(rs) ;
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+			
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lm;
+	}
+	public static int GetStudentSumOfGrades(int StudentID,int CourseSemester) {
+		
+		int SumOfGrades = 0 ;
+		ResultSet rs=null;
+		PreparedStatement stmt=null;
+		LoadJDBCDriver();
+		HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("select sum(public.grade.grade) as SumOfGrades from public.grade\n" + 
+					"where grade.studentid=?");
+
+			stmt.setInt(1, StudentID);
+			
+			rs = stmt.executeQuery();
+			rs.next();
+			SumOfGrades = rs.getInt("SumOfGrades");
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+			
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return SumOfGrades;
+	}
+	//Professor requests
+	public static List<Map<String, Object>> GetProfessorGradeByCourse(int ProfessorID,int CourseID) {
+		List<Map<String, Object>> lm = new ArrayList<>();
+		ResultSet rs=null;
+		PreparedStatement stmt=null;
+		LoadJDBCDriver();
+		HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("select public.course.coursename,public.grade.grade from public.grade,public.course,professor_course \n" + 
+					"where professor_course.professorafm=? and grade.course_id=professor_course.course_id and grade.course_id = course.id and grade.course_id =?");
+
+			stmt.setInt(1, ProfessorID);
+			stmt.setInt(2, CourseID);
+			
+			rs = stmt.executeQuery();
+			lm = RSToLM(rs) ;
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+			
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lm;
+	}
+	public static boolean SetProfessorGradeToCourse(int StudentID ,int CourseID,int Grade) {
+		boolean ok =false;
+		PreparedStatement stmt=null;
+		LoadJDBCDriver();
+		HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("INSERT INTO public.grade(\n" + 
+					"            studentid, course_id, grade)\n" + 
+					"    VALUES (?, ?, ?);\n" + 
+					"");
+
+			stmt.setInt(1, StudentID );
+			stmt.setInt(2, CourseID);
+			stmt.setInt(3, Grade);
+			ok = stmt.execute();
+			if (stmt != null) { stmt.close();}
+			
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ok;
+	}
+	
 }
