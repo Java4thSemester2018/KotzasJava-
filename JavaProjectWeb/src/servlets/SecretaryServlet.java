@@ -106,7 +106,7 @@ public class SecretaryServlet extends HttpServlet {
                 	 }
                 	 break;
                  case "Assign":
-                     request.getRequestDispatcher("assign.jsp").forward(request, response);
+                     request.getRequestDispatcher("setgrade.jsp").forward(request, response);
                 	 return;
                  default:
                 	 

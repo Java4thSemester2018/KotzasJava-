@@ -1,10 +1,16 @@
 package classes;
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSetMetaData;
 
 public class Professor extends User{
-
+	static Connection connection=null;
 	private int professorAFM;
 	private List<String> courseIDs=new ArrayList<String>(); //Βάζει το μάθημα του professor
 	public Professor(int k){
@@ -23,14 +29,45 @@ public class Professor extends User{
 	public List<String> getCourse_ID( ){
 		return courseIDs;
 	}
+	//to check if the lesson for this stud has grade on it
 
-	public void setGrade(String courseID, int studentID, int grade) {
-		if (courseIDs.equals(courseID)) {
-			System.out.print("Το μάθημα βρέθηκε");
-			System.out.print("Αντιστοιχίζεται το studentID με αυτό που θέλει ο καθηγητής");
-			System.out.print("Αν δεν υπάρχει το αντίστοιχο grade δημιουργείται, αλλιώς το αλλάζει.");
-			
+	
+	public static boolean setGrade(int studentID, int courseID, int grade) {
+		ResultSet rs=null;
+		PreparedStatement stmt;
+		DatabaseLinker.LoadJDBCDriver();
+		DatabaseLinker.HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("INSERT INTO GRADES VALUES("+studentID+","+courseID+","+grade+")");
+			rs = stmt.executeQuery();
+			boolean exists =  rs.next();
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+			return exists;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return false;
+	}
+	
+	public static List<Map<String, Object>> PrintCourses(int courseid) {
+		List<Map<String, Object>> lm = new ArrayList<>();
+		ResultSet rs=null;
+		Statement stmt=null;
+		DatabaseLinker.LoadJDBCDriver();
+		DatabaseLinker.HaveOpenConection();
+		try {
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery("Select * from grade where courseid="+courseid);
+			lm = DatabaseLinker.RSToLM(rs);
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lm;
 	}
 	
 	public void printGrades(){
