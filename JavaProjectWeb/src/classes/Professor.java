@@ -30,9 +30,6 @@ public class Professor extends User{
 		return courseIDs;
 	}
 	//to check if the lesson for this stud has grade on it
-
-	
-
 	
 	public void printGrades(){
 		for (String course : courseIDs) {
