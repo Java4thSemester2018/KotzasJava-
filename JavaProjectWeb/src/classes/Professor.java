@@ -32,42 +32,6 @@ public class Professor extends User{
 	//to check if the lesson for this stud has grade on it
 
 	
-	public static boolean setGrade(int studentID, int courseID, int grade) {
-		ResultSet rs=null;
-		PreparedStatement stmt;
-		DatabaseLinker.LoadJDBCDriver();
-		DatabaseLinker.HaveOpenConection();
-		try {
-			stmt = connection.prepareStatement("INSERT INTO GRADES VALUES("+studentID+","+courseID+","+grade+")");
-			rs = stmt.executeQuery();
-			boolean exists =  rs.next();
-			if (stmt != null) { stmt.close();}
-			if (rs != null) { rs.close();}
-			return exists;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	public static List<Map<String, Object>> PrintCourses(int courseid) {
-		List<Map<String, Object>> lm = new ArrayList<>();
-		ResultSet rs=null;
-		Statement stmt=null;
-		DatabaseLinker.LoadJDBCDriver();
-		DatabaseLinker.HaveOpenConection();
-		try {
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery("Select * from grade where courseid="+courseid);
-			lm = DatabaseLinker.RSToLM(rs);
-			if (stmt != null) { stmt.close();}
-			if (rs != null) { rs.close();}
-		}catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return lm;
 	}
 	
 	public void printGrades(){

@@ -29,7 +29,8 @@ catch(Exception AE){
 <br>
 <div class="loginbox">
 <form action = "${pageContext.request.contextPath}/ProfessorServlet" method = "post">
-                	 		<p>CourseID</p><input required name="courseID" />
+							<p>Professor ID</p><input required name="professorID" />
+                	 		<p>Course ID</p><input required name="courseID" />
                 	 		<input type="hidden" name="GradePerLes" value="true" />
              	 			<input type="hidden" name="SetGrade" value="false" />
                 	 		<input type="submit"/>

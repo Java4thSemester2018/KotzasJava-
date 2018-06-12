@@ -38,7 +38,7 @@ public class ProfessorServlet extends HttpServlet {
     			int courseid = Integer.parseInt(request.getParameter("courseID"));
     			int studid = Integer.parseInt(request.getParameter("studentID"));
     			int grade = Integer.parseInt(request.getParameter("grade"));
-    			boolean done = Professor.setGrade(studid, courseid, grade);
+    			boolean done = DatabaseLinker.SetProfessorGradeToCourse(studid, courseid, grade);
     			if (done) {
     			request.setAttribute("output","Done!");
     			}
@@ -55,7 +55,8 @@ public class ProfessorServlet extends HttpServlet {
 		else if (fromGradePerLes){
 			try {
     			int courseid = Integer.parseInt(request.getParameter("courseID"));
-    			List<Map<String, Object>> done = Professor.PrintCourses(courseid);
+				int professorID = Integer.parseInt(request.getParameter("professorID"));
+    			List<Map<String, Object>> done =  DatabaseLinker.GetProfessorGradeByCourse(professorID,courseid);
     			s = "<table border=\"0\" width=\"500\" align=\"center\">\n";
            	 s += "<tr> \n";
            		 for (Map.Entry<String, Object> rowEntry : done.get(0).entrySet()) {
@@ -79,6 +80,7 @@ public class ProfessorServlet extends HttpServlet {
 		try {
             switch (option) {
                 case "provoli":
+					request.getRequestDispatcher("printcourses.jsp").forward(request, response);
                 	break;
                 case "setgrade":
                     request.getRequestDispatcher("setgrade.jsp").forward(request, response);
