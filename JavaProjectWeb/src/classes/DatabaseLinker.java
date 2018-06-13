@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
+import classes.Password;
 
 public class DatabaseLinker {
 	static Connection connection=null;
@@ -112,14 +113,14 @@ public class DatabaseLinker {
 		LoadJDBCDriver();
 		HaveOpenConection();
 		try {
-			stmt = connection.prepareStatement("SELECT * FROM public.User WHERE username=?");
-
-			stmt.setString(1, username);
-
+			stmt = connection.prepareStatement("SELECT * FROM public.User WHERE username="+username);
 			rs = stmt.executeQuery();
-			if(rs.next() && rs.getString("password") == password) {
-				
+			
+			if(rs.next()) {
+				if(Password.isCorrectPassword(rs.getString("password"), rs.getString("salt"), password)) {
 				user = new User(rs.getInt("userid"),username,rs.getString("name"),rs.getString("surname"),rs.getString("department"),rs.getString("user_role"));
+			
+				}
 			}
 			if (stmt != null) { stmt.close();}
 			if (rs != null) { rs.close();}
@@ -129,6 +130,42 @@ public class DatabaseLinker {
 		}
 		return user ;
 	}
+	
+	public static boolean CreateUser(String username, String password, String name, String surname, String department, String role) {
+		ResultSet rs=null;
+		PreparedStatement stmt;
+		LoadJDBCDriver();
+		HaveOpenConection();
+		try {
+			stmt = connection.prepareStatement("INSERT INTO public.User VALUES (DEFAULT, username=?, password=?, hash=?, name=?, surname=?,department=?,user_role=?)");
+			
+			byte[] newSalt = Password.getNextSalt();
+			char[] passwordf = password.toCharArray();
+			byte[] hash = Password.hash(passwordf, newSalt);
+			
+			String hashedString = new String(hash);
+			String salt = new String(newSalt);
+			
+			stmt.setString(1, username);
+			stmt.setString(2, hashedString);
+			stmt.setString(3, salt);
+			stmt.setString(4, name);
+			stmt.setString(5, surname);
+			stmt.setString(6, department);
+			stmt.setString(7, role);
+			rs = stmt.executeQuery();
+			boolean exists =  rs.next();
+			if (stmt != null) { stmt.close();}
+			if (rs != null) { rs.close();}
+			return exists;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
 	public static boolean IsUserInProfession(Integer userid,String Profession) {
 		ResultSet rs=null;
 		PreparedStatement stmt=null;
