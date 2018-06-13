@@ -6,16 +6,18 @@ public class User {
 	private String surname;
 	private String department;
 	private String role;
+	private String password;
+	private String salt;
 	//private static int usersCounter=0;
 	public User() {}
-	public User(Integer userid,String username,String name,String surname,String department) {
-		this(userid, username,name,surname,department,"guest");
-	}
-	public User(Integer userid,String username,String name,String surname,String department,String role) {
+
+	public User(Integer userid,String username, String password, String salt,String name,String surname,String department,String role) {
 		
 		this.userid =userid;
 		this.username = username;
 		this.name = name;
+		this.password = password;
+		this.salt = salt;
 		this.surname = surname;
 		this.department = department;
 		this.role = role;

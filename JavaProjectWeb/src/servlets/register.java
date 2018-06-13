@@ -1,5 +1,6 @@
 package servlets;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,8 +28,14 @@ public class register extends HttpServlet {
 		String department=request.getParameter("department");
 		String role=request.getParameter("role");
 		if(!DatabaseLinker.IsUser(username)) {
-			DatabaseLinker.CreateUser(username, password, name, surname, department, role);
-			User user= DatabaseLinker.GetUser(username, password);
+			User user=null;
+			try {
+				DatabaseLinker.CreateUser(username, password, name, surname, department, role);
+				user = DatabaseLinker.GetUser(username, password);
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		    HttpSession session = request.getSession(true);
 		    session.setAttribute("username", user.getUsername()); 
 			session.setAttribute("name", user.getName()); 

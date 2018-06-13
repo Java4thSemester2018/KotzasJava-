@@ -1,6 +1,7 @@
 package classes;
 
 import java.util.*;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -106,20 +107,18 @@ public class DatabaseLinker {
 		}
 		return false;
 	}
-	public static User GetUser(String username,String password) {
+	public static User GetUser(String username,String password) throws NoSuchAlgorithmException {
 		ResultSet rs=null;
 		PreparedStatement stmt=null;
-		User user = new User(-1,"","","","");
+		User user = new User(-1,"","","","","","","");
 		LoadJDBCDriver();
 		HaveOpenConection();
 		try {
-			stmt = connection.prepareStatement("SELECT * FROM public.User WHERE username="+username);
+			stmt = connection.prepareStatement("SELECT * FROM public.User WHERE \"username\"='"+username+"'");
 			rs = stmt.executeQuery();
-			
 			if(rs.next()) {
-				if(Password.isCorrectPassword(rs.getString("password"), rs.getString("salt"), password)) {
-				user = new User(rs.getInt("userid"),username,rs.getString("name"),rs.getString("surname"),rs.getString("department"),rs.getString("user_role"));
-			
+				if(Password.isCorrectmd5(rs.getString("password"), rs.getString("salt"), password)) {
+				user = new User(rs.getInt("userid"),username,password,rs.getString("salt"),rs.getString("name"),rs.getString("surname"),rs.getString("department"),rs.getString("user_role"));
 				}
 			}
 			if (stmt != null) { stmt.close();}
@@ -131,7 +130,7 @@ public class DatabaseLinker {
 		return user ;
 	}
 	
-	public static boolean CreateUser(String username, String password, String name, String surname, String department, String role) {
+	public static boolean CreateUser(String username, String password, String name, String surname, String department, String role) throws NoSuchAlgorithmException {
 		ResultSet rs=null;
 		PreparedStatement stmt;
 		LoadJDBCDriver();
@@ -140,8 +139,8 @@ public class DatabaseLinker {
 			stmt = connection.prepareStatement("INSERT INTO public.User VALUES (DEFAULT, username=?, password=?, hash=?, name=?, surname=?,department=?,user_role=?)");
 			
 			byte[] newSalt = Password.getNextSalt();
-			char[] passwordf = password.toCharArray();
-			byte[] hash = Password.hash(passwordf, newSalt);
+			
+			String hash = Password.md5(password,newSalt.toString());
 			
 			String hashedString = new String(hash);
 			String salt = new String(newSalt);

@@ -1,7 +1,7 @@
 package classes;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -24,6 +24,26 @@ public class Password {
     return salt;
   }
   
+  
+  public static String md5(String salt,String plainText) throws NoSuchAlgorithmException{
+	  MessageDigest md = MessageDigest.getInstance("MD5");
+
+	  if (salt!=null){
+		  md.update(salt.getBytes());
+	  }
+	  md.update(plainText.getBytes());
+	  byte byteData[]=md.digest();
+	  StringBuffer sb=new StringBuffer();
+	  for (int i = 0; i < byteData.length; i++) {
+	        sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16)
+	                .substring(1));
+	    }
+	    return sb.toString();
+	  
+	  
+  }
+  
+  
   public static byte[] hash(char[] password, byte[] salt) {
     PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
     Arrays.fill(password, Character.MIN_VALUE);
@@ -37,6 +57,19 @@ public class Password {
     }
   }
 
+  public static boolean isCorrectmd5(String hashed, String salt, String password) throws NoSuchAlgorithmException {
+	  String s= md5(salt,password);
+	  System.out.println(s+"."+hashed);
+	  if (s.toString().trim().equals(hashed.toString().trim())){
+		  System.out.println("yes");
+		  return true;
+	  }
+	  else{
+		  return false;
+	  }
+	  
+  }
+  
   
   public static boolean isCorrectPassword(String password, String salt, String expectedHash) {
 	  char[] passwordf = password.toCharArray();

@@ -1,5 +1,6 @@
 package servlets;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,20 +22,30 @@ public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username=request.getParameter("username");
-		String password=request.getParameter("username");
+		String password=request.getParameter("password");
 		if(DatabaseLinker.IsUser(username)) {
-			User user= DatabaseLinker.GetUser(username,password);
-			if(user.getRole()!="guest"){
-		        HttpSession session = request.getSession(true);
-				session.setAttribute("username", user.getUsername()); 
-				session.setAttribute("name", user.getName()); 
-				session.setAttribute("surname", user.getSurname()); 
-				session.setAttribute("dep", user.getDepartment()); 
-				session.setAttribute("role", user.getRole());
-				request.getRequestDispatcher(Character.toUpperCase(user.getRole().charAt(0)) + user.getRole().substring(1)+"Servlet").forward(request,response);
-				return;
-            }
+			
+			User user=null;
+			try {
+				user = DatabaseLinker.GetUser(username,password);
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			;
+
+	        HttpSession session = request.getSession(true);
+			session.setAttribute("username", user.getUsername()); 
+			session.setAttribute("name", user.getName()); 
+			session.setAttribute("surname", user.getSurname()); 
+			session.setAttribute("dep", user.getDepartment()); 
+			session.setAttribute("role", user.getRole());
+			request.getRequestDispatcher(Character.toUpperCase(user.getRole().charAt(0)) + user.getRole().substring(1)+"Servlet").forward(request,response);
+			return;
+        
 		}
+		
+
 		request.setAttribute("message", "Couldn't login ...wrong username");
 		request.getRequestDispatcher("login.jsp").forward(request,response);
 	}

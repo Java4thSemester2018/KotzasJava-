@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import classes.Password;
 
 public class csvParse {
 
-	public static void main(String args[]) throws FileNotFoundException, IOException
+	public static void main(String args[]) throws FileNotFoundException, IOException, NoSuchAlgorithmException
 	{
 		    String file1="/home/neetshonen/Documents/UNIVERSITY/JAVA EE/TABLESCSV/User.csv";
 		    String Line;
@@ -26,8 +27,8 @@ public class csvParse {
 				String user_role=data[7];
 				char[] passwordf = password.toCharArray();
 				byte[] saltf = salt.getBytes();
-				byte[] hash= Password.hash(passwordf, saltf);
-				System.out.println(hash.length);
+				String hash=Password.md5(salt, password);
+				//System.out.println(hash.length);
 				String hashString = new String(hash);
 				System.out.println(userid+","+username+","+hashString+","+salt+","+name+","+surname+","+department+","+user_role);
 			}
